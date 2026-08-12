@@ -32,11 +32,6 @@ Full documentation:
 - [`docs/parameter_table.md`](docs/parameter_table.md) — every parameter, value, and source
 - [`docs/architecture.md`](docs/architecture.md) — software design and how to extend it
 
-## Status: all 12 phases complete
-
-135 tests passing, 6 runnable examples, 3 models, full analysis API
-(metrics, sweeps, sensitivity, fitting, dose-schedule optimization).
-
 ## Quick start
 
 ```bash
