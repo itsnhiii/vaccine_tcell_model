@@ -28,14 +28,9 @@ into a clearly-labeled integrated extension:
 
 Full documentation:
 - [`docs/model_specification.md`](docs/model_specification.md) — what's modeled and why
-- [`docs/equations.md`](docs/equations.md) — equation-by-equation provenance and every discrepancy found against the original MATLAB reference implementation (Zenodo 12595650)
+- [`docs/equations.md`](docs/equations.md) — equation-by-equation provenance and every discrepancy found against the original MATLAB reference implementation (Zenodo 12595650 from the Science model)
 - [`docs/parameter_table.md`](docs/parameter_table.md) — every parameter, value, and source
 - [`docs/architecture.md`](docs/architecture.md) — software design and how to extend it
-
-## Status: all 12 phases complete
-
-135 tests passing, 6 runnable examples, 3 models, full analysis API
-(metrics, sweeps, sensitivity, fitting, dose-schedule optimization).
 
 ## Quick start
 
@@ -97,6 +92,30 @@ plot(s) alongside itself:
 | `04_dose_schedule_comparison.py` | `sweep_dose_schedules` comparing bolus/2-ED/7-ED |
 | `05_affinity_sweep.py` | `sweep_parameter` over K, the 4-panel comparison the spec asks for |
 
+Start with `00_dosing_and_events.py` if you're new to the package, or
+`03_integrated_model.py` if you want the full pipeline right away.
+
+## Exploratory plots (`runs/`)
+
+`runs/` holds ad-hoc scripts (and their output plots) written while
+exploring the model interactively — dosing-schedule illustrations,
+adjuvant dose-response comparisons, and a full dose-schedule
+optimization deep dive (multi-start search, number-of-doses sweep,
+non-zero-dose-constrained sweep with a global optimizer). Unlike
+`examples/`, these aren't a curated tutorial sequence — see
+[`runs/README.md`](runs/README.md) for what's in each subfolder.
+
+Every script in both `examples/` and `runs/` is self-contained and saves
+its `.png` output(s) next to itself, so you can just open the `.png`
+files directly (in this repo or after cloning) without running anything.
+To regenerate a plot or try your own parameters:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+python runs/dosing_and_adjuvant/dosing_schedule_comparison_run.py   # or any other script
+```
+
 ## Package layout
 
 ```
@@ -114,20 +133,3 @@ src/vaccine_tcell_model/
 See [`docs/architecture.md`](docs/architecture.md) for how these fit
 together and how to extend the package (new components, new models, new
 dosing patterns).
-
-## Design principles this package follows throughout
-
-1. **No published equation is ever silently altered.** Every equation in
-   `models/science/` and `models/mayer/` is a direct transcription,
-   verified against the primary sources and the reference MATLAB code.
-2. **No two papers' parameter sets are ever silently merged.**
-   `ParameterSet` has no merge/update-in-place API by design.
-3. **Every parameter carries provenance** — `source` and `source_type`
-   are mandatory, not optional, on every `Parameter`.
-4. **Discrepancies are documented, not resolved by guessing.** See
-   `docs/equations.md` for a full list of what was found by inspecting
-   the reference MATLAB implementation that isn't stated in either paper
-   (an undocumented floor-clamp, an undocumented ×10 scaling factor, a
-   dosing-scheme generator, and others) and how each was handled.
-5. **This project's own extensions are always labeled as such.** Nothing
-   in `models/integrated/` is presented as if it were published.
