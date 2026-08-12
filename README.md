@@ -28,7 +28,7 @@ into a clearly-labeled integrated extension:
 
 Full documentation:
 - [`docs/model_specification.md`](docs/model_specification.md) — what's modeled and why
-- [`docs/equations.md`](docs/equations.md) — equation-by-equation provenance and every discrepancy found against the original MATLAB reference implementation (Zenodo 12595650 from the Science model)
+- [`docs/equations.md`](docs/equations.md) — equation-by-equation provenance and every discrepancy found against the original MATLAB reference implementation (Zenodo 12595650 from Bhagchandani et al., Science Immunology 9, eadl3755 (2024))
 - [`docs/parameter_table.md`](docs/parameter_table.md) — every parameter, value, and source
 - [`docs/architecture.md`](docs/architecture.md) — software design and how to extend it
 
