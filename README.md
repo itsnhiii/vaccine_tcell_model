@@ -110,19 +110,3 @@ See [`docs/architecture.md`](docs/architecture.md) for how these fit
 together and how to extend the package (new components, new models, new
 dosing patterns).
 
-## Design principles this package follows throughout
-
-1. **No published equation is ever silently altered.** Every equation in
-   `models/science/` and `models/mayer/` is a direct transcription,
-   verified against the primary sources and the reference MATLAB code.
-2. **No two papers' parameter sets are ever silently merged.**
-   `ParameterSet` has no merge/update-in-place API by design.
-3. **Every parameter carries provenance** — `source` and `source_type`
-   are mandatory, not optional, on every `Parameter`.
-4. **Discrepancies are documented, not resolved by guessing.** See
-   `docs/equations.md` for a full list of what was found by inspecting
-   the reference MATLAB implementation that isn't stated in either paper
-   (an undocumented floor-clamp, an undocumented ×10 scaling factor, a
-   dosing-scheme generator, and others) and how each was handled.
-5. **This project's own extensions are always labeled as such.** Nothing
-   in `models/integrated/` is presented as if it were published.
