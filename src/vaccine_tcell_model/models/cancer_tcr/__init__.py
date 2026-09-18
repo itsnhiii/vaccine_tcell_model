@@ -1,9 +1,9 @@
 """This project's cancer/TCR-signaling model: Ag -> DC -> aDC_Ag -> pMHC_density -> T,
 plus a closed-form TCR signaling-strength calculation (docs/cancer_tcr_model.md).
 
-Built per Zach's request (a cancer-mouse/patient dosing-comparison tool,
-not the virus/humoral-antibody pipeline the Science/Mayer/Integrated
-models target): reuses Bhagchandani et al. 2024's upstream DC/adjuvant
+A cancer-mouse/patient dosing-comparison tool, not the virus/humoral-
+antibody pipeline the Science/Mayer/Integrated models target: reuses
+Bhagchandani et al. 2024's upstream DC/adjuvant
 pharmacokinetics unchanged, replaces the Tfh/germinal-center output with
 nothing (no Tfh compartment at all), and adds a kinetic-proofreading TCR
 signaling-strength layer built from Chakraborty & Weiss 2014. NEVER

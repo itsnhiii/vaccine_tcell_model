@@ -7,7 +7,8 @@ discipline as parameters/integrated.py):
 - "cancer_tcr": the ODE population dynamics (Ag/Adj/TC/DC/aDC_Ag reused
   unchanged from Science; pMHC_density and the T-cell equation are this
   project's own extension, replacing Mayer/Science's Tfh-oriented
-  equations per Zach's request -- see models/cancer_tcr/).
+  equations for a cancer-context, non-humoral readout -- see
+  models/cancer_tcr/).
 - "tcr_signal": the closed-form kinetic-proofreading TCR-signal
   calculation (Chakraborty & Weiss 2014), a pure function of the ODE's
   already-simulated trajectories, not itself part of the ODE.
@@ -177,11 +178,11 @@ def default_tcr_signal_parameters(
     """Default parameters for the closed-form kinetic-proofreading
     TCR-signal calculation (models/cancer_tcr/signal.py).
 
-    K_D: the model's REQUIRED scientific input (per user decision) --
-    antigen affinity, in uM. Default 50 uM is illustrative only (mid-range
-    "tumor self-antigen" per Stone, Chervin & Kranz 2009, Immunology
-    126:165-176) -- always override with Zach's actual measured/assumed
-    antigen affinity.
+    K_D: the model's REQUIRED scientific input -- antigen affinity, in
+    uM. Default 50 uM is illustrative only (mid-range "tumor
+    self-antigen" per Stone, Chervin & Kranz 2009, Immunology
+    126:165-176) -- always override with the real measured or assumed
+    affinity of the antigen being modeled.
 
     k_on: FIXED literature constant (both source documents agree TCR-pMHC
     k_on varies little across peptides; k_off carries the affinity
@@ -198,7 +199,7 @@ def default_tcr_signal_parameters(
     values (Tischer & Weiner 2019; Yousefi et al. 2019 optogenetic
     dwell-time-tuning experiments report ~2-4 effective steps at ~seconds
     each), not measured for any specific tumor-antigen/cDC1 system --
-    treat both as FITTABLE against Zach's experimental TCR-signal readout,
+    treat both as FITTABLE against real experimental TCR-signal data,
     not as fixed literature constants.
 
     include_serial_triggering: RESERVED, not yet implemented (0.0=off,
@@ -214,8 +215,9 @@ def default_tcr_signal_parameters(
             "K_D", K_D, default=50.0, units="uM",
             description=(
                 "TCR-pMHC antigen affinity (dissociation constant), REQUIRED "
-                "scientific input -- Zach's antigen, not an illustrative value. "
-                "Also used directly (unconverted) as the occupancy saturation "
+                "scientific input -- the antigen actually being modeled, not "
+                "an illustrative value. Also used directly (unconverted) as "
+                "the occupancy saturation "
                 "constant against pMHC_density -- see the K_D-units caveat in "
                 "models/cancer_tcr/signal.py and docs/cancer_tcr_model.md"
             ),

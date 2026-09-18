@@ -68,7 +68,14 @@ def plot_pipeline(fig) -> None:
         ax.set_title(name)
         ax.set_xlabel("time (days)")
         ax.set_ylabel(PIPELINE_YLABELS[name])
-        ax.set_yscale("log")
+        if name == "Ag":
+            # Linear 0-1 scale (plain floats) rather than log/scientific
+            # notation -- antigen's own dynamic range is small enough
+            # (default total dose = 1.0) that log scale just obscures it
+            # behind tiny decay-tail values instead of showing the doses.
+            ax.set_ylim(bottom=0)
+        else:
+            ax.set_yscale("log")
 
     axes[-1].plot(signal_df["time"], signal_df["S_pop"], color="C3")
     axes[-1].set_title("S_pop\n(TCR signal, population)")

@@ -1,8 +1,8 @@
 # Cancer/TCR-signaling model
 
-A readable overview of the fourth model in this package, added per Zach's
-request: a tool for comparing **TCR signaling strength across dosing
-schedules** in a cancer (mouse/patient) context, rather than the
+A readable overview of the fourth model in this package: a tool for
+comparing **TCR signaling strength across dosing schedules** in a
+cancer (mouse/patient) context, rather than the
 virus/humoral-antibody pipeline the Science/Mayer/Integrated models
 target. For equation-by-equation code, see
 `src/vaccine_tcell_model/models/cancer_tcr/` and
@@ -106,10 +106,11 @@ physically different knobs behind one number.
 
 ## The TCR signaling-strength calculation
 
-Built from Chakraborty & Weiss 2014 (*Nat. Immunol.* 15:797-807), the
-paper Zach specifically flagged as more relevant than either of the
-original two papers. Two pieces, both closed-form (no new ODE
-integration):
+Built from Chakraborty & Weiss 2014 (*Nat. Immunol.* 15:797-807), a
+primary review of TCR-signal initiation that is more directly relevant
+to a proximal signal-strength readout than either of the two original
+vaccine-response papers this package started from. Two pieces, both
+closed-form (no new ODE integration):
 
 **1. Occupancy** -- the TCR+pMHC binding step is bimolecular
 (second-order), but because pMHC sits at a site with roughly constant
@@ -139,9 +140,9 @@ contacts(t)  = T(t) * aDC_Ag(t) / (T(t) + aDC_Ag(t))    # saturating T-DC meetin
 S_pop(t)     = S_contact(t) * contacts(t)               # population-aggregate signal
 ```
 
-Both outputs are exposed (per your decision to keep both, documented
-here so it's not a mystery later): `S_contact` isolates "how hard is
-each engaged TCR firing" (driven by affinity and pMHC density alone);
+Both outputs are exposed deliberately, so a low aggregate signal is
+always diagnosable: `S_contact` isolates "how hard is each engaged TCR
+firing" (driven by affinity and pMHC density alone);
 `S_pop` folds in "how many T cells and DCs are actually meeting" (driven
 by the dosing schedule via the upstream population dynamics). A low
 `S_pop` is therefore always traceable to one of exactly two causes,
@@ -162,8 +163,8 @@ explicitly): optogenetic dwell-time-tuning experiments (Tischer & Weiner
 2019; Yousefi et al. 2019) put the effective chain at **N ~ 2-4 steps**,
 each taking **on the order of seconds** (so `k_p` ~ 0.1-1/s). Defaults
 here are `N=3`, `k_p=0.3/s` -- documented as `model_extension`,
-illustrative, and meant to be **fit against Zach's own experimental
-TCR-signal readout**, not treated as ground truth.
+illustrative, and meant to be **fit against real experimental
+TCR-signal data**, not treated as ground truth.
 
 ## `K_D` and `k_on`
 
@@ -224,28 +225,30 @@ real pMHC copy-number data lets us calibrate `pMHC_density`'s scale.
 
 ## The serial-triggering question -- deliberately not implemented
 
-Zach's background-reading report presents a bell-shaped
-response-vs-dwell-time curve (proofreading rewards long dwell, serial
-triggering rewards short dwell, product peaks at an intermediate
-affinity). Chakraborty & Weiss 2014 are explicitly skeptical of this as
-a general phenomenon: they cite Holler & Kranz 2003's TCR-affinity-variant
-data (half-lives spanning 30-1500s) showing a **monotonic** response with
-**no observed optimum**, and state "very little evidence exists in clear
-support" of the bell-curve prediction. Since this model exists
-specifically to be validated against Zach's own data, the bell curve is
-left as an **untested hypothesis**, not baked into the default equations:
+Background reading on TCR triggering mechanisms often presents a
+bell-shaped response-vs-dwell-time curve (proofreading rewards long
+dwell, serial triggering rewards short dwell, product peaks at an
+intermediate affinity). Chakraborty & Weiss 2014 are explicitly
+skeptical of this as a general phenomenon: they cite Holler & Kranz
+2003's TCR-affinity-variant data (half-lives spanning 30-1500s) showing
+a **monotonic** response with **no observed optimum**, and state "very
+little evidence exists in clear support" of the bell-curve prediction.
+Since this model exists specifically to be validated against real
+experimental data, the bell curve is left as an **untested hypothesis**,
+not baked into the default equations:
 `tcr_signal_params.value("include_serial_triggering")` is a reserved
 flag that raises `NotImplementedError` if set to a nonzero value, rather
-than silently doing nothing. Implement it only if Zach's data actually
-shows the predicted downturn.
+than silently doing nothing. Implement it only if validation data
+actually shows the predicted downturn.
 
 ## Deferred: downstream fate (signal 2/3, NFAT/AP-1, anergy/exhaustion)
 
-Zach's background report also covers CD28 costimulation (signal 2),
-inflammatory cytokines (signal 3), and the NFAT/AP-1 partnership that
-determines full effector differentiation vs. anergy/exhaustion. None of
-that is implemented here -- per your explicit instruction, this model
-stops at `S_contact`/`S_pop` (the proximal TCR-triggering signal), and a
-"Module F" covering downstream fate is deferred until/unless Zach wants
-it. If it's added later, it should consume `S_contact`/`S_pop` as an
-input rather than being fused into this module.
+The broader TCR-signaling literature also covers CD28 costimulation
+(signal 2), inflammatory cytokines (signal 3), and the NFAT/AP-1
+partnership that determines full effector differentiation vs.
+anergy/exhaustion. None of that is implemented here: this model is
+deliberately scoped to stop at `S_contact`/`S_pop` (the proximal
+TCR-triggering signal), and a "Module F" covering downstream fate is
+left for a future extension if a concrete need for it arises. If it is
+added later, it should consume `S_contact`/`S_pop` as an input rather
+than being fused into this module.
