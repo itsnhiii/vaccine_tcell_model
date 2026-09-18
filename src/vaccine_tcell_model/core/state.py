@@ -91,3 +91,17 @@ T. The pMHC production/decay equation and the Mayer-shaped T-cell
 denominator that consumes it are a model_extension -- not published
 verbatim by either source paper. See docs/equations.md Section 3.
 """
+
+CANCER_TCR_STATES = StateSpec(names=("Ag", "Adj", "TC", "DC", "aDC_Ag", "pMHC_density", "T"))
+"""This project's cancer/TCR-signaling extension (docs/cancer_tcr_model.md).
+
+Reuses Science's Ag/Adj/TC/DC/aDC_Ag upstream states unchanged (they are
+generic vaccine-adjuvant/DC pharmacokinetics, not virus-specific). Drops
+TFH entirely -- there is no humoral/germinal-center output in a cancer
+CD8-killing context. Replaces the bulk `pMHC` pool with `pMHC_density`,
+an intensive (per-DC) quantity, and the T-cell equation loses the
+`-eta*(T-T0)` Tfh-differentiation sink (see models/cancer_tcr/tcell.py).
+The TCR-signal itself (S_contact, S_pop) is deliberately NOT a state
+here -- it is a closed-form post-processing function of these states,
+not an ODE quantity (see models/cancer_tcr/signal.py).
+"""

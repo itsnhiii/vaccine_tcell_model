@@ -6,6 +6,11 @@ This subpackage only defines the shared Parameter/ParameterSet/SourceType
 machinery every parameter set is built from.
 """
 
+from .cancer_tcr import (
+    cancer_tcr_default_initial_conditions,
+    default_cancer_tcr_parameters,
+    default_tcr_signal_parameters,
+)
 from .integrated import default_integrated_parameters, integrated_default_initial_conditions
 from .mayer import (
     MAYER_FIG2_LIGAND_K,
@@ -33,4 +38,7 @@ __all__ = [
     "MAYER_FIG2_LIGAND_K",
     "default_integrated_parameters",
     "integrated_default_initial_conditions",
+    "default_cancer_tcr_parameters",
+    "cancer_tcr_default_initial_conditions",
+    "default_tcr_signal_parameters",
 ]

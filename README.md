@@ -25,9 +25,17 @@ into a clearly-labeled integrated extension:
   layer and a hybrid T-cell equation. Every equation and parameter that
   isn't published verbatim is explicitly labeled `model_extension` in
   its provenance metadata — never presented as literature.
+- **Cancer/TCR-signaling model** — a separate, cancer-context extension
+  (`models.cancer_tcr`): reuses Science's upstream DC/adjuvant kinetics,
+  drops the Tfh/humoral-antibody output entirely, and adds a closed-form
+  kinetic-proofreading TCR signaling-strength calculation built on
+  Chakraborty & Weiss 2014 (*Nat. Immunol.* 15:797-807), for comparing
+  TCR signal across dosing schedules and validating against experiment.
+  See [`docs/cancer_tcr_model.md`](docs/cancer_tcr_model.md).
 
 Full documentation:
 - [`docs/model_specification.md`](docs/model_specification.md) — what's modeled and why
+- [`docs/cancer_tcr_model.md`](docs/cancer_tcr_model.md) — the cancer/TCR-signaling model: pipeline, equations, and every open caveat (units, timescale-separation, serial triggering)
 - [`docs/equations.md`](docs/equations.md) — equation-by-equation provenance and every discrepancy found against the original MATLAB reference implementation (Zenodo 12595650 from Bhagchandani et al., Science Immunology 9, eadl3755 (2024))
 - [`docs/parameter_table.md`](docs/parameter_table.md) — every parameter, value, and source
 - [`docs/architecture.md`](docs/architecture.md) — software design and how to extend it
